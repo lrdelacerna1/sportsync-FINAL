@@ -1,0 +1,8 @@
+{
+  "name": "SportSync",
+  "description": "An interactive sports booking, social matchmaking, and venue management platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

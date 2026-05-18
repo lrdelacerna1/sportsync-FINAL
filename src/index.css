@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Anton&family=JetBrains+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-black font-sans antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply font-black italic tracking-tighter uppercase text-black;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+  }
+
+  .glass-nav {
+    @apply bg-white/80 backdrop-blur-xl border-t border-black/5;
+  }
+
+  .sport-card {
+    @apply bg-white border border-black/[0.08] rounded-3xl overflow-hidden transition-all duration-300 shadow-sm;
+  }
+
+  .accent-text {
+    @apply text-black;
+  }
+
+  .accent-bg {
+    @apply bg-brand-neon text-black;
+  }
+
+  .mobile-frame {
+    @apply relative mx-auto w-full max-w-[400px] h-[844px] bg-white overflow-hidden border-[12px] border-[#e5e5e5] rounded-[3.5rem] shadow-2xl;
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
