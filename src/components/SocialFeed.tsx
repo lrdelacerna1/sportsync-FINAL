@@ -294,7 +294,7 @@ function MyEventsView({ events, setEvents }: { events: any[], setEvents: React.D
     );
 }
 
-export function SocialFeed({ forceNotifications = false }: { forceNotifications?: boolean }) {
+export function SocialFeed({ forceNotifications = false, ownerNewsfeed = false }: { forceNotifications?: boolean; ownerNewsfeed?: boolean }) {
   const [view, setView] = useState<'feed' | 'matchmaker' | 'clubs' | 'notifications' | 'report' | 'myEvents'>('feed');
   const [reportEntity, setReportEntity] = useState<any>(null);
   const [myEvents, setMyEvents] = useState(INITIAL_MY_EVENTS);
@@ -304,10 +304,15 @@ export function SocialFeed({ forceNotifications = false }: { forceNotifications?
 
   // Sync view with forceNotifications prop
   React.useEffect(() => {
+    if (ownerNewsfeed) {
+      setView('feed');
+      return;
+    }
+
     if (forceNotifications) {
       setView('notifications');
     }
-  }, [forceNotifications]);
+  }, [forceNotifications, ownerNewsfeed]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [notifications, setNotifications] = useState([
@@ -442,7 +447,7 @@ export function SocialFeed({ forceNotifications = false }: { forceNotifications?
         </div>
 
         {/* View Switcher */}
-        {view !== 'notifications' && view !== 'report' && (
+        {view !== 'notifications' && view !== 'report' && !ownerNewsfeed && (
           <div className="flex bg-zinc-100 p-1 rounded-xl shadow-inner mb-6">
             <button 
               onClick={() => setView('feed')}

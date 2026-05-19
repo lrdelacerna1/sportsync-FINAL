@@ -17,7 +17,7 @@ import { AdminDashboard }  from './components/AdminDashboard';
 // ── Types ──────────────────────────────────────────────────────────────────
 type Role    = 'user' | 'owner' | 'admin';
 type UserTab = 'explore' | 'social' | 'notif' | 'account';
-type OwnerTab= 'dashboard' | 'bookings' | 'notif' | 'account';
+type OwnerTab= 'dashboard' | 'newsfeed' | 'notif' | 'account';
 
 interface Account {
   role: Role;
@@ -96,7 +96,7 @@ export default function App() {
                 className="flex-1 flex flex-col overflow-hidden"
               >
                 {ownerTab === 'dashboard' && <SellerDashboard />}
-                {ownerTab === 'bookings'  && <SocialFeed />}
+                {ownerTab === 'newsfeed'  && <SocialFeed ownerNewsfeed={true} />}
                 {ownerTab === 'notif'     && <SocialFeed forceNotifications={true} />}
                 {ownerTab === 'account'   && <EssentialUI />}
               </motion.div>
@@ -131,7 +131,7 @@ export default function App() {
         {!showOnboarding && account?.role === 'owner' && (
           <nav className="glass-nav h-20 shrink-0 flex items-center justify-around px-2 pb-4">
             <NavIcon active={ownerTab === 'dashboard'} onClick={() => setOwnerTab('dashboard')} icon={<LayoutDashboard size={22} />} label="Dashboard" />
-            <NavIcon active={ownerTab === 'bookings'}  onClick={() => setOwnerTab('bookings')}  icon={<ClipboardList size={22} />}  label="Bookings"  />
+            <NavIcon active={ownerTab === 'newsfeed'}  onClick={() => setOwnerTab('newsfeed')}  icon={<Users size={22} />}           label="Newsfeed"  />
             <NavIcon active={ownerTab === 'notif'}     onClick={() => setOwnerTab('notif')}     icon={<Bell size={22} />}           label="Notif"     />
             <NavIcon active={ownerTab === 'account'}   onClick={() => setOwnerTab('account')}   icon={<User size={22} />}           label="Account"   />
           </nav>
