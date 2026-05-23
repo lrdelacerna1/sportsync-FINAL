@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Search, Users, Bell, User,
+  Search, Users, Bell, User, Calendar,
   LayoutDashboard, Building2, ClipboardList, LogOut
 } from 'lucide-react';
 
@@ -10,13 +10,14 @@ import { Onboarding }      from './components/Onboarding';
 import { Login }           from './components/Login';
 import { UnifiedBooking }  from './components/UnifiedBooking';
 import { SocialFeed }      from './components/SocialFeed';
+import { MyBookings }      from './components/MyBookings';
 import { EssentialUI }     from './components/EssentialUI';
 import { SellerDashboard } from './components/SellerDashboard';
 import { AdminDashboard }  from './components/AdminDashboard';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type Role    = 'user' | 'owner' | 'admin';
-type UserTab = 'explore' | 'social' | 'notif' | 'account';
+type UserTab = 'explore' | 'social' | 'bookings' | 'account';
 type OwnerTab= 'dashboard' | 'newsfeed' | 'notif' | 'account';
 
 interface Account {
@@ -109,7 +110,7 @@ export default function App() {
               >
                 {userTab === 'explore' && <UnifiedBooking />}
                 {userTab === 'social'  && <SocialFeed />}
-                {userTab === 'notif'   && <SocialFeed forceNotifications={true} />}
+                {userTab === 'bookings'   && <MyBookings />}
                 {userTab === 'account' && <EssentialUI />}
               </motion.div>
 
@@ -149,7 +150,7 @@ export default function App() {
           <nav className="glass-nav h-20 shrink-0 flex items-center justify-around px-2 pb-4">
             <NavIcon active={userTab === 'explore'} onClick={() => setUserTab('explore')} icon={<Search size={22} />}  label="Explore"    />
             <NavIcon active={userTab === 'social'}  onClick={() => setUserTab('social')}  icon={<Users size={22} />}   label="Community"  />
-            <NavIcon active={userTab === 'notif'}   onClick={() => setUserTab('notif')}   icon={<Bell size={22} />}    label="Notif"      />
+            <NavIcon active={userTab === 'bookings'}   onClick={() => setUserTab('bookings')}   icon={<Calendar size={22} />}    label="Bookings"      />
             <NavIcon active={userTab === 'account'} onClick={() => setUserTab('account')} icon={<User size={22} />}    label="Account"    />
           </nav>
         )}

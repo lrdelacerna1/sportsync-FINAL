@@ -309,9 +309,9 @@ export function SocialFeed({ forceNotifications = false, ownerNewsfeed = false }
       return;
     }
 
-    if (forceNotifications) {
-      setView('notifications');
-    }
+        if (forceNotifications) {
+            setView('myEvents');
+        }
   }, [forceNotifications, ownerNewsfeed]);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -439,9 +439,8 @@ export function SocialFeed({ forceNotifications = false, ownerNewsfeed = false }
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-4xl font-black italic leading-none">Community</h1>
             <div className="flex gap-1.5">
-                <button onClick={() => setView('notifications')} className={`glass p-1.5 relative ${view === 'notifications' ? 'accent-text' : ''}`}>
-                    <Bell size={16} />
-                    {notifications.some(n => !n.read) && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
+                <button onClick={() => setView('myEvents')} className={`glass p-1.5 relative ${view === 'myEvents' ? 'accent-text' : ''}`}>
+                    <Calendar size={16} />
                 </button>
             </div>
         </div>
@@ -467,12 +466,12 @@ export function SocialFeed({ forceNotifications = false, ownerNewsfeed = false }
             >
               Matches
             </button>
-            <button 
-              onClick={() => setView('myEvents')}
-              className={`flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${view === 'myEvents' ? 'accent-bg shadow-lg shadow-brand-neon/20' : 'text-zinc-500'}`}
-            >
-              Events
-            </button>
+                        <button 
+                            onClick={() => setView('myEvents')}
+                            className={`flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${view === 'myEvents' ? 'accent-bg shadow-lg shadow-brand-neon/20' : 'text-zinc-500'}`}
+                        >
+                            Bookings
+                        </button>
           </div>
         )}
       </header>
