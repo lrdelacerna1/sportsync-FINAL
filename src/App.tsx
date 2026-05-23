@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Users, Bell, User,
@@ -29,6 +29,8 @@ interface Account {
 export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [account, setAccount]               = useState<Account | null>(null);
+  const [logoutVisible, setLogoutVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // Per-role active tabs
   const [userTab,  setUserTab]  = useState<UserTab>('explore');
@@ -37,9 +39,34 @@ export default function App() {
   const handleLogin  = (acc: Account) => setAccount(acc);
   const handleLogout = () => { setAccount(null); };
 
+  useEffect(() => {
+    const check = () => {
+      const c = containerRef.current as HTMLElement | null;
+      const inner = document.querySelector('.no-scrollbar') as HTMLElement | null;
+      const sc = typeof window !== 'undefined' ? window.scrollY : 0;
+      const cst = c?.scrollTop ?? 0;
+      const ist = inner?.scrollTop ?? 0;
+      const top = Math.max(sc, cst, ist);
+      setLogoutVisible(top < 20);
+    };
+
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    const c = containerRef.current;
+    if (c) c.addEventListener('scroll', check, { passive: true });
+    const inner = document.querySelector('.no-scrollbar') as HTMLElement | null;
+    if (inner && inner !== c) inner.addEventListener('scroll', check, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', check);
+      if (c) c.removeEventListener('scroll', check);
+      if (inner && inner !== c) inner.removeEventListener('scroll', check);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="mobile-frame flex flex-col">
+      <div ref={containerRef} className="mobile-frame flex flex-col">
 
         {/* Status bar */}
         <div className="h-10 w-full flex justify-between items-center px-8 shrink-0">
@@ -141,7 +168,7 @@ export default function App() {
         {!showOnboarding && account && account.role !== 'admin' && (
           <button
             onClick={handleLogout}
-            className="absolute top-12 right-20 z-40 flex items-center gap-1.5 px-3 py-1.5 bg-zinc-100 rounded-xl text-[8px] font-black uppercase text-zinc-500 hover:bg-red-50 hover:text-red-500 transition-colors"
+            className={`absolute top-12 right-4 z-40 flex items-center gap-1 rounded-full border border-black/10 bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-widest text-zinc-500 shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-white ${logoutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
           >
             <LogOut size={12} /> Logout
           </button>

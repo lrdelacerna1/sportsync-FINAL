@@ -27,9 +27,21 @@ const REPORTS = [
 ];
 
 export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
-  const [tab, setTab] = useState<'overview' | 'users' | 'reports'>('overview');
+  const [tab, setTab] = useState<'overview' | 'users' | 'reports' | 'venues'>('overview');
   const [users, setUsers] = useState(USERS);
   const [reports, setReports] = useState(REPORTS);
+  const [venueApps, setVenueApps] = useState([
+    { id: 1, name: 'Cebu Pickleball Hub', owner: 'owner@sportsync.com', location: 'Cebu IT Park', sport: 'Pickleball', status: 'Pending', submitted: '20 May' },
+    { id: 2, name: 'Zenith Yoga Studio', owner: 'zenith@studio.com', location: 'Cebu Business Park', sport: 'Yoga', status: 'Pending', submitted: '18 May' },
+  ] as { id: number; name: string; owner: string; location: string; sport: string; status: 'Pending' | 'Approved' | 'Declined'; submitted: string }[]);
+
+  const approveVenue = (id: number) => {
+    setVenueApps(prev => prev.map(v => v.id === id ? { ...v, status: 'Approved' } : v));
+  };
+
+  const declineVenue = (id: number) => {
+    setVenueApps(prev => prev.map(v => v.id === id ? { ...v, status: 'Declined' } : v));
+  };
 
   const toggleSuspend = (id: number) => {
     setUsers(prev => prev.map(u =>
@@ -64,7 +76,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
 
         {/* Tab switcher */}
         <div className="flex bg-zinc-100 p-1 rounded-xl">
-          {(['overview', 'users', 'reports'] as const).map(t => (
+          {(['overview', 'users', 'reports', 'venues'] as const).map(t => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -200,6 +212,49 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                       <CheckCircle size={10} /> Resolve
                     </button>
                   )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── VENUES (ADMIN VERIFICATION) ── */}
+        {tab === 'venues' && (
+          <div className="space-y-3">
+            <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-4">
+              {venueApps.filter(v => v.status === 'Pending').length} pending venue applications
+            </p>
+            {venueApps.map(v => (
+              <div key={v.id} className={`sport-card p-4 flex flex-col gap-3 ${v.status === 'Pending' ? '' : 'opacity-80'}`}>
+                <div className="flex items-start gap-3">
+                  <div className="p-3 bg-zinc-50 border border-black/5 rounded-xl text-zinc-400 shrink-0">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-black uppercase italic text-black truncate">{v.name}</h4>
+                    <p className="text-[9px] text-zinc-500">{v.sport} · {v.location} · {v.owner}</p>
+                  </div>
+                  <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${v.status === 'Pending' ? 'bg-yellow-100 text-yellow-600' : v.status === 'Approved' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                    {v.status}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => approveVenue(v.id)}
+                    disabled={v.status !== 'Pending'}
+                    className={`px-3 py-1.5 rounded-lg text-[8px] font-black uppercase transition-all ${v.status === 'Pending' ? 'bg-black text-brand-neon' : 'bg-zinc-100 text-zinc-400'}`}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => declineVenue(v.id)}
+                    disabled={v.status !== 'Pending'}
+                    className={`px-3 py-1.5 rounded-lg text-[8px] font-black uppercase transition-all ${v.status === 'Pending' ? 'bg-red-50 text-red-500' : 'bg-zinc-100 text-zinc-400'}`}
+                  >
+                    Decline
+                  </button>
+                  <div className="ml-auto text-[8px] text-zinc-400">Submitted {v.submitted}</div>
                 </div>
               </div>
             ))}
